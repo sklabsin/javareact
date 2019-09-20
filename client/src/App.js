@@ -11,31 +11,18 @@ class App extends Component {
   constructor(){
     super();
     this.state={
-      beers:[]
+      tasks:[]
     }
   }
 
-  componentDidMount() {
-    this.setState({isLoading: true});
-  
-    fetch('http://localhost:8080/good-beers')
-      .then(response => response.json())
-      .then(data => this.setState({beers: data, isLoading: false}));
-
-
-
-  }
 
   render() {
     return (
       <Router>
       <div className="App">
         <Navbar />
-        <Route exact path="/" component={Dashboard} ></Route>
+        <Route exact path="/" component={Dashboard}></Route>
         <Route exact path="/addTask" component={AddTask} ></Route>
-        {/* {this.state.beers.map(function(d, idx){
-         return (<li key={idx}>{d.name}</li>)
-       })} */}
       </div>
       </Router>
     );
