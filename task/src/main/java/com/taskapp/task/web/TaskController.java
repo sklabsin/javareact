@@ -45,7 +45,6 @@ public class TaskController {
 
             return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
         }
-
         Task newPT = taskService.saveOrUpdateProjectTask(task);
 
         return new ResponseEntity<Task>(newPT, HttpStatus.CREATED);

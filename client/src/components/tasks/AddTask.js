@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 class AddTask extends Component {
     constructor(){
@@ -24,10 +25,20 @@ class AddTask extends Component {
         const newTask = {
              taskname: this.state.taskname,
              description: this.state.description,
-             state: this.state.status
+             status: this.state.status
         };
+
+
+
         
         console.log(newTask);
+
+
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/api/board',
+            data:newTask
+          });
     }
 
 

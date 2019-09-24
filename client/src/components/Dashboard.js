@@ -8,7 +8,10 @@ class Dashboard extends Component {
 
         this.state={
             // test:"",
-            tasks:[]
+            tasks:[],
+            TODO:[],
+            INPROGRESS:[],
+            DONE:[]
         }
     }
 
@@ -18,19 +21,52 @@ class Dashboard extends Component {
           .then(response => response.json())
           .then(data => {
 
-            
             this.setState({ tasks: data });
+            this.handleResponse();
           })
           .catch(console.log);
 
-        //   this.setState({
-        //       test:"sijo"
-        //   })
-    
-    
       }
+
+      handleResponse() {
+        var temptodo=[];
+        var tempinpr=[];
+        var tempdone=[];
+
+        this.state.tasks.map(item =>{
+          
+            if(item.status ==="TO_DO"){
+                this.setState({
+                    TOD:this.state.TODO.push(item)
+                })
+                // .push(item);
+            }
+            else if(item.status ==="IN_PROGRESS"){
+                tempinpr.push(item);
+            }
+            else if(item.status ==="DONE"){
+                tempdone.push(item);
+            }
+
+            return null;
+          
+        });
+
+
+        this.setState({
+            TODO: temptodo,
+            INPROGRESS:tempinpr,
+            DONE:tempdone
+        })
+      }
+
     render() {
-        const {tasks } = this.state;
+
+        // const {tasks } = this.state;
+        // const {TODO} = this.state.DONE;
+        // const {INPROGRESS} = this.state.INPROGRESS;
+        // const {DONE} = this.state.DONE;
+        console.log(this.state.TODO);
         return (
             
             <div className="container">
@@ -48,26 +84,8 @@ class Dashboard extends Component {
                                     <h3>TO DO</h3>
                                 </div>
                             </div>
-                            {/* {this.state.tasks.map((todo) => (
-                                <div className="card">
-                                    <div className="card-body">
-                                    <h5 className="card-title">{todo.taskname}</h5>
-                                    <h6 className="card-subtitle mb-2 text-muted">
-                                    { todo.status==="In Progress" &&
-                                        <span>
-                                        Completed
-                                        </span>
-                                    }
-                                    { todo.status ==="Done" &&
-                                        <span>
-                                        Pending
-                                        </span>
-                                    }              
-                                    </h6>
-                                    </div>
-                                </div>
-                                ))} */}
-                            <TodoList data={tasks} />
+                            {/* <TodoList data={tasks} type={1}/> */}
+                            <Test data='sijo'/>
                         </div>
                         <div className="col-md-4">
                             <div className="card text-center mb-2">
@@ -75,7 +93,8 @@ class Dashboard extends Component {
                                     <h3>In Progress</h3>
                                 </div>
                             </div>
-                            {/* <TaskItem/> */}
+                            {/* <TodoList data={tasks} type={2}/> */}
+                            {/* <InprogressList data={INPROGRESS} /> */}
                         </div>
                         <div className="col-md-4">
                             <div className="card text-center mb-2">
@@ -83,9 +102,8 @@ class Dashboard extends Component {
                                     <h3>Done</h3>
                                 </div>
                             </div>
-                            {/* <!-- SAMPLE PROJECT TASK STARTS HERE -->
-
-                            <!-- SAMPLE PROJECT TASK ENDS HERE --> */}
+                            {/* <TodoList data={tasks} type={3}/> */}
+                            {/* <DoneList data={DONE} /> */}
                         </div>
                     </div>
                 </div>
@@ -94,30 +112,234 @@ class Dashboard extends Component {
         );
     }
 }
+function Test(props){
+    console.log(props.data);
+    return <div>
 
-
-function TodoList({ data }) {
-    return data.map(item => (
-        <div className="card mb-1 bg-light">
-
-           <div className="card-header text-primary">
-               {item.taskname}
-           </div>
-           <div className="card-body bg-light">
-               <h5 className="card-title">summary</h5>
-               <p className="card-text text-truncate ">
-                   acceptanceCriteria
-               </p>
-               <a href="#" className="btn btn-primary">
-                   View / Update
-               </a>
-
-               <button className="btn btn-danger ml-4">
-                   Delete
-               </button>
-           </div>
-       </div>
-    ));
+    </div>
 }
+// function TodoList({  }) {
+//     const data = this.props.TODO;
+//     return data.map(item =>{
+//         return (
+//             <div key={item.id} className="card mb-1 bg-light">
+        
+//                         <div className="card-header text-primary">
+//                             {item.taskname}
+//                         </div>
+//                         <div className="card-body bg-light">
+//                             <p className="card-text text-truncate ">
+//                                 {item.description}
+//                             </p>
+//                             <a href="#" className="btn btn-primary">
+//                                 View / Update
+//                             </a>
+                
+//                             <button className="btn btn-danger ml-4">
+//                                 Delete
+//                             </button>
+//                         </div>
+//                     </div>);
+//     });
+// }
+
+// function InprogressList({ data }) {
+    // console.log(this.state.tasks);
+    // return data.map(item =>{
+//         return (
+//             <div key={item.id} className="card mb-1 bg-light">
+        
+//                         <div className="card-header text-primary">
+//                             {item.taskname}
+//                         </div>
+//                         <div className="card-body bg-light">
+//                             <p className="card-text text-truncate ">
+//                             </p>
+//                                 {item.description}
+//                             <a href="#" className="btn btn-primary">
+//                                 View / Update
+//                             </a>
+                
+//                             <button className="btn btn-danger ml-4">
+//                                 Delete
+//                             </button>
+//                         </div>
+//                     </div>);
+//     });
+// }
+
+// function DoneList({ data }) {
+//     return data.map(item =>{
+//         return (
+//             <div key={item.id} className="card mb-1 bg-light">
+        
+//                         <div className="card-header text-primary">
+//                             {item.taskname}
+//                         </div>
+//                         <div className="card-body bg-light">
+//                             <p className="card-text text-truncate ">
+//                                 {item.description}
+//                             </p>
+//                             <a href="#" className="btn btn-primary">
+//                                 View / Update
+//                             </a>
+                
+//                             <button className="btn btn-danger ml-4">
+//                                 Delete
+//                             </button>
+//                         </div>
+//                     </div>);
+//     });
+// }
+
+// function TodoList({ data, type }) {
+    
+//     console.log(data);
+//     switch(type) {
+//         case 1: {
+//             return data.map(item => {
+//                 var status = item.status;
+//                 if(status ==="TO_DO") {
+//                     console.log(status);
+//                     return (
+//                         <div key={item.id} className="card mb-1 bg-light">
+        
+//                         <div className="card-header text-primary">
+//                             {item.taskname}
+//                         </div>
+//                         <div className="card-body bg-light">
+//                             <p className="card-text text-truncate ">
+//                                 {item.description}
+//                             </p>
+//                             <a href="#" className="btn btn-primary">
+//                                 View / Update
+//                             </a>
+                
+//                             <button className="btn btn-danger ml-4">
+//                                 Delete
+//                             </button>
+//                         </div>
+//                     </div>);
+                   
+//                 }
+//                 else {
+//                     return null;
+//                 }
+//             });
+//         }
+//         case 2: {
+//             return data.map(item => {
+//                 var status = item.status;
+//                 if(status ==="IN_PROGRESS") {
+//                     console.log(status);
+//                     return (
+//                         <div key={item.id} className="card mb-1 bg-light">
+        
+//                         <div className="card-header text-primary">
+//                             {item.taskname}
+//                         </div>
+//                         <div className="card-body bg-light">
+//                             <p className="card-text text-truncate ">
+//                                 {item.description}
+//                             </p>
+//                             <a href="#" className="btn btn-primary">
+//                                 View / Update
+//                             </a>
+                
+//                             <button className="btn btn-danger ml-4">
+//                                 Delete
+//                             </button>
+//                         </div>
+//                     </div>);
+                   
+//                 }
+//                 else {
+//                     return null;
+//                 }
+//             });
+//         }
+//         case 3: {
+//             return data.map(item => {
+//                 var status = item.status;
+//                 if(status ==="DONE") {
+//                     console.log(status);
+//                     return (
+//                         <div key={item.id} className="card mb-1 bg-light">
+        
+//                         <div className="card-header text-primary">
+//                             {item.taskname}
+//                         </div>
+//                         <div className="card-body bg-light">
+//                             <p className="card-text text-truncate ">
+//                                 {item.description}
+//                             </p>
+//                             <a href="#" className="btn btn-primary">
+//                                 View / Update
+//                             </a>
+                
+//                             <button className="btn btn-danger ml-4">
+//                                 Delete
+//                             </button>
+//                         </div>
+//                     </div>);
+                   
+//                 }
+//                 else {
+//                     return null;
+//                 }
+//             });
+//         }
+
+
+
+//         default:
+//             return null;
+//     }
+    
+// }
+    
+    //     if (type===1 && item.status ==="TO_DO") ? 
+    
+    //     : (type===2 && item.status ==="IN_PROGRESS") ? 
+    //     <div key={item.id} className="card mb-1 bg-light">
+
+    //        <div className="card-header text-primary">
+    //            {item.taskname}
+    //        </div>
+    //        <div className="card-body bg-light">
+    //            <h5 className="card-title">summary</h5>
+    //            <p className="card-text text-truncate ">
+    //                acceptanceCriteria
+    //            </p>
+    //            <a href="#" className="btn btn-primary">
+    //                View / Update
+    //            </a>
+
+    //            <button className="btn btn-danger ml-4">
+    //                Delete
+    //            </button>
+    //        </div>
+    //    </div>
+    //     : 
+    //     <div key={item.id} className="card mb-1 bg-light">
+
+    //        <div className="card-header text-primary">
+    //            {item.taskname}
+    //        </div>
+    //        <div className="card-body bg-light">
+    //            <h5 className="card-title">summary</h5>
+    //            <p className="card-text text-truncate ">
+    //                acceptanceCriteria
+    //            </p>
+    //            <a href="#" className="btn btn-primary">
+    //                View / Update
+    //            </a>
+
+    //            <button className="btn btn-danger ml-4">
+    //                Delete
+    //            </button>
+    //        </div>
+    //    </div>
+    // }));
 
 export default Dashboard;
