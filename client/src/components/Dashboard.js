@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
-// import TaskItem from './tasks/TaskItem';
-
+import ModalClass from './ModalClass';
 class Dashboard extends Component {
     constructor(props){
         super(props);
 
         this.state={
-            // test:"",
             tasks:[],
             TODO:[],
             INPROGRESS:[],
-            DONE:[]
+            DONE:[],
+            modal: false
         }
+
+
+
     }
+
+    selectModal = (info) => {
+        this.setState({modal: !this.state.modal}) // true/false toggle
+      }
+
+    
 
     componentDidMount() {
   
@@ -22,24 +30,22 @@ class Dashboard extends Component {
           .then(data => {
 
             this.setState({ tasks: data });
-            this.handleResponse();
+            if(data.length>0)
+                this.handleResponse();
           })
           .catch(console.log);
-
       }
 
       handleResponse() {
         var temptodo=[];
         var tempinpr=[];
         var tempdone=[];
+        const all = this.state.tasks;
 
-        this.state.tasks.map(item =>{
-          
+        all.forEach(item => {
+            
             if(item.status ==="TO_DO"){
-                this.setState({
-                    TOD:this.state.TODO.push(item)
-                })
-                // .push(item);
+                temptodo.push(item);
             }
             else if(item.status ==="IN_PROGRESS"){
                 tempinpr.push(item);
@@ -48,8 +54,6 @@ class Dashboard extends Component {
                 tempdone.push(item);
             }
 
-            return null;
-          
         });
 
 
@@ -62,48 +66,45 @@ class Dashboard extends Component {
 
     render() {
 
-        // const {tasks } = this.state;
-        // const {TODO} = this.state.DONE;
-        // const {INPROGRESS} = this.state.INPROGRESS;
-        // const {DONE} = this.state.DONE;
-        console.log(this.state.TODO);
+        const TODO = this.state.TODO;
+        const INPROGRESS = this.state.INPROGRESS;
+        const DONE = this.state.DONE;
+        
+        if(this.state.tasks.length===0)
+            return null;
         return (
-            
+
             <div className="container">
                 <Link to="/addTask" className="btn btn-primary mb-3">
                 <i className="fas fa-plus-circle"> Create Project Task</i>
                 </Link>
-
                 <br />
                 <hr />
                 <div className="container">
-                    <div className="row">
+                    <div key={1} className="row">
                         <div className="col-md-4">
                             <div className="card text-center mb-2">
                                 <div className="card-header bg-secondary text-white">
                                     <h3>TO DO</h3>
                                 </div>
                             </div>
-                            {/* <TodoList data={tasks} type={1}/> */}
-                            <Test data='sijo'/>
+                            <DisplayTodo data={TODO}/>
                         </div>
-                        <div className="col-md-4">
+                        <div key={2} className="col-md-4">
                             <div className="card text-center mb-2">
                                 <div className="card-header bg-primary text-white">
                                     <h3>In Progress</h3>
                                 </div>
                             </div>
-                            {/* <TodoList data={tasks} type={2}/> */}
-                            {/* <InprogressList data={INPROGRESS} /> */}
+                            <DisplayInprogs data={INPROGRESS}/>
                         </div>
-                        <div className="col-md-4">
+                        <div key={3} className="col-md-4">
                             <div className="card text-center mb-2">
                                 <div className="card-header bg-success text-white">
                                     <h3>Done</h3>
                                 </div>
                             </div>
-                            {/* <TodoList data={tasks} type={3}/> */}
-                            {/* <DoneList data={DONE} /> */}
+                            <DisplayDone data={DONE}/>
                         </div>
                     </div>
                 </div>
@@ -112,234 +113,94 @@ class Dashboard extends Component {
         );
     }
 }
-function Test(props){
-    console.log(props.data);
-    return <div>
+function DisplayTodo(props){
+    const item = props.data.map((number, index) => {
 
-    </div>
+        if(number.status ==="TO_DO")
+            return <ListItem key={index} value={number} />
+        else {
+            // const temp =[];
+            return <div></div>
+        }
+    });
+    
+    return (
+        <ul >
+      {item}
+    </ul>
+    );
+   
 }
-// function TodoList({  }) {
-//     const data = this.props.TODO;
-//     return data.map(item =>{
-//         return (
-//             <div key={item.id} className="card mb-1 bg-light">
-        
-//                         <div className="card-header text-primary">
-//                             {item.taskname}
-//                         </div>
-//                         <div className="card-body bg-light">
-//                             <p className="card-text text-truncate ">
-//                                 {item.description}
-//                             </p>
-//                             <a href="#" className="btn btn-primary">
-//                                 View / Update
-//                             </a>
-                
-//                             <button className="btn btn-danger ml-4">
-//                                 Delete
-//                             </button>
-//                         </div>
-//                     </div>);
-//     });
-// }
 
-// function InprogressList({ data }) {
-    // console.log(this.state.tasks);
-    // return data.map(item =>{
-//         return (
-//             <div key={item.id} className="card mb-1 bg-light">
+function DisplayInprogs(props){
+    const item = props.data.map((number, index) => {
         
-//                         <div className="card-header text-primary">
-//                             {item.taskname}
-//                         </div>
-//                         <div className="card-body bg-light">
-//                             <p className="card-text text-truncate ">
-//                             </p>
-//                                 {item.description}
-//                             <a href="#" className="btn btn-primary">
-//                                 View / Update
-//                             </a>
-                
-//                             <button className="btn btn-danger ml-4">
-//                                 Delete
-//                             </button>
-//                         </div>
-//                     </div>);
-//     });
-// }
-
-// function DoneList({ data }) {
-//     return data.map(item =>{
-//         return (
-//             <div key={item.id} className="card mb-1 bg-light">
-        
-//                         <div className="card-header text-primary">
-//                             {item.taskname}
-//                         </div>
-//                         <div className="card-body bg-light">
-//                             <p className="card-text text-truncate ">
-//                                 {item.description}
-//                             </p>
-//                             <a href="#" className="btn btn-primary">
-//                                 View / Update
-//                             </a>
-                
-//                             <button className="btn btn-danger ml-4">
-//                                 Delete
-//                             </button>
-//                         </div>
-//                     </div>);
-//     });
-// }
-
-// function TodoList({ data, type }) {
+        if(number.status ==="IN_PROGRESS") {
+            return <ListItem key={index} value={number} />
+        }
+        else {
+            console.log(number.status)
+            return <div></div>
+            }
+    });
     
-//     console.log(data);
-//     switch(type) {
-//         case 1: {
-//             return data.map(item => {
-//                 var status = item.status;
-//                 if(status ==="TO_DO") {
-//                     console.log(status);
-//                     return (
-//                         <div key={item.id} className="card mb-1 bg-light">
-        
-//                         <div className="card-header text-primary">
-//                             {item.taskname}
-//                         </div>
-//                         <div className="card-body bg-light">
-//                             <p className="card-text text-truncate ">
-//                                 {item.description}
-//                             </p>
-//                             <a href="#" className="btn btn-primary">
-//                                 View / Update
-//                             </a>
-                
-//                             <button className="btn btn-danger ml-4">
-//                                 Delete
-//                             </button>
-//                         </div>
-//                     </div>);
-                   
-//                 }
-//                 else {
-//                     return null;
-//                 }
-//             });
-//         }
-//         case 2: {
-//             return data.map(item => {
-//                 var status = item.status;
-//                 if(status ==="IN_PROGRESS") {
-//                     console.log(status);
-//                     return (
-//                         <div key={item.id} className="card mb-1 bg-light">
-        
-//                         <div className="card-header text-primary">
-//                             {item.taskname}
-//                         </div>
-//                         <div className="card-body bg-light">
-//                             <p className="card-text text-truncate ">
-//                                 {item.description}
-//                             </p>
-//                             <a href="#" className="btn btn-primary">
-//                                 View / Update
-//                             </a>
-                
-//                             <button className="btn btn-danger ml-4">
-//                                 Delete
-//                             </button>
-//                         </div>
-//                     </div>);
-                   
-//                 }
-//                 else {
-//                     return null;
-//                 }
-//             });
-//         }
-//         case 3: {
-//             return data.map(item => {
-//                 var status = item.status;
-//                 if(status ==="DONE") {
-//                     console.log(status);
-//                     return (
-//                         <div key={item.id} className="card mb-1 bg-light">
-        
-//                         <div className="card-header text-primary">
-//                             {item.taskname}
-//                         </div>
-//                         <div className="card-body bg-light">
-//                             <p className="card-text text-truncate ">
-//                                 {item.description}
-//                             </p>
-//                             <a href="#" className="btn btn-primary">
-//                                 View / Update
-//                             </a>
-                
-//                             <button className="btn btn-danger ml-4">
-//                                 Delete
-//                             </button>
-//                         </div>
-//                     </div>);
-                   
-//                 }
-//                 else {
-//                     return null;
-//                 }
-//             });
-//         }
 
 
+    return (
+        <ul >
+      {item}
+    </ul>
+    );
+   
+}
 
-//         default:
-//             return null;
-//     }
+function DisplayDone(props){
+    const item = props.data.map((number, index) => {
+
+        if(number.status ==="DONE")
+            return <ListItem key={index} value={number} />
+        else {
+            // const temp =[];
+            return <div></div>
+        }
+    });
     
-// }
-    
-    //     if (type===1 && item.status ==="TO_DO") ? 
-    
-    //     : (type===2 && item.status ==="IN_PROGRESS") ? 
-    //     <div key={item.id} className="card mb-1 bg-light">
 
-    //        <div className="card-header text-primary">
-    //            {item.taskname}
-    //        </div>
-    //        <div className="card-body bg-light">
-    //            <h5 className="card-title">summary</h5>
-    //            <p className="card-text text-truncate ">
-    //                acceptanceCriteria
-    //            </p>
-    //            <a href="#" className="btn btn-primary">
-    //                View / Update
-    //            </a>
 
-    //            <button className="btn btn-danger ml-4">
-    //                Delete
-    //            </button>
-    //        </div>
-    //    </div>
-    //     : 
-    //     <div key={item.id} className="card mb-1 bg-light">
+    return (
+        <ul >
+      {item}
+    </ul>
+    );
+   
+}
 
-    //        <div className="card-header text-primary">
-    //            {item.taskname}
-    //        </div>
-    //        <div className="card-body bg-light">
-    //            <h5 className="card-title">summary</h5>
-    //            <p className="card-text text-truncate ">
-    //                acceptanceCriteria
-    //            </p>
-    //            <a href="#" className="btn btn-primary">
-    //                View / Update
-    //            </a>
+function ListItem(props) {
+    const value = props.value;
 
-    //            <button className="btn btn-danger ml-4">
-    //                Delete
-    //            </button>
-    //        </div>
-    //    </div>
-    // }));
+    return (
+      // Wrong! There is no need to specify the key here:
+      <div key={value.id} className="card mb-1 bg-light">
+        
+      <div className="card-header text-primary">
+      </div>
+      <div className="card-body bg-light">
+          <p className="card-text text-truncate ">
+              {value.description}
+          </p>
+          <div>
+          <ModalClass data={value}/>
+          </div>
+           
+         
+
+            <button className="btn btn-danger ml-4">
+              Delete
+          </button>
+        
+      </div>
+  </div>
+    );
+  }
 
 export default Dashboard;
